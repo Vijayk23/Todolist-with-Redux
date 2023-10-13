@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addTodo } from "./UseReducer";
+import { addTodo, deleteTodo } from "./UseReducer";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ModeIcon from "@mui/icons-material/Mode";
+import Button from "@mui/material/Button";
 
 function Home() {
   const Todos1 = useSelector((state) => state.Todos);
@@ -9,9 +12,14 @@ function Home() {
 
   const dispatch = useDispatch();
 
+  const handledelete = (id) => {
+    dispatch(deleteTodo({ id: id }));
+  };
+
   const addtoo = (event) => {
     event.preventDefault();
     dispatch(addTodo({ todotitle: todo }));
+    setTodo("");
   };
   return (
     <>
@@ -22,6 +30,7 @@ function Home() {
             type="text"
             placeholder="Enter Your Today's Task..."
             className="input-task"
+            value={todo}
             required
             onChange={(e) => setTodo(e.target.value)}
           />
@@ -29,7 +38,7 @@ function Home() {
             ADD TASK
           </button>
         </form>
-        <table>
+        <table className="tasklist-table">
           <thead>
             <tr>
               <th>List TODO </th>
@@ -39,7 +48,16 @@ function Home() {
           <tbody>
             {Todos1.map((to, index) => (
               <tr key={index}>
-                <td>{to.todotitle}</td>
+                <td className="task">{to.todotitle}</td>
+                <td>
+                  {" "}
+                  <Button>
+                    <ModeIcon color="primary" />
+                  </Button>
+                  <Button onClick={() => handledelete(Todos1.id)}>
+                    <DeleteIcon color="error" />
+                  </Button>
+                </td>
               </tr>
             ))}
           </tbody>
